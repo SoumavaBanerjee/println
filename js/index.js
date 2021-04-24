@@ -23,6 +23,8 @@ function ValidateForm() {
 
 //Hiding Thank you
 $(".Thanks").hide();
+$(".println-ds").hide();
+$(".println").hide();
 
 $("#login-button").click(function sub(event) {
   ValidateForm();
@@ -32,13 +34,14 @@ $("#login-button").click(function sub(event) {
     $(".progress").fadeOut(500);
     $(".wrapper").addClass("form-success");
     $(".Thanks").show();
+    $(".println-ds").show();
+    $(".println").show();
     //Adding data to firebase
     writeUserData();
   }
 });
 
-// //Hiding form
-// $('#form').hide();
+var incMessage = 0;
 
 //Condition for able to write in form and progress bar
 //var count = 3;
@@ -50,49 +53,38 @@ function check() {
   if (count == 3) {
     $("#name").prop("disabled", false);
     $("#email").prop("disabled", false);
+    $("#state").prop("disabled", false);
     $("#login-button").prop("disabled", false);
   }
+
+  // for sharing link to 3 wp-grp
+  $(".checkbox-message").click(function(e){
+    if (incMessage == 2) {
+      $('#item-2').prop('checked', true); // Checks it
+      $(this).unbind(e);
+    } else {
+      $('.checkbox-message').removeAttr('checked')
+      e.preventDefault();
+      incMessage++;
+    }
+  })
 }
-
-// // alert message for hover on name
-// function nameHover(){
-//     setTimeout(() => {
-//         if($('#name').prop('disabled')){
-//             alert("Do all the task to fill your name field in the form")
-//         }
-//     }, 500);
-// }
-
-// // alert message for hover on email
-// function emailHover(){
-//     setTimeout(() => {
-//         if($('#email').prop('disabled')){
-//             alert("Do all the task to fill up your email field in the form")
-//         }
-//     }, 500);
-// }
-
-// // alert message for hover on submit button
-// function submitHover(){
-//     setTimeout(() => {
-//         if($('#login-button').prop('disabled')){
-//             alert("Do all the task to submit the form")
-//         }
-//     }, 500);
-// }
 
 //Connecting firebase
 function writeUserData() {
   var Name = document.getElementById("name").value;
   var Email = document.getElementById("email").value;
+  var Country = document.getElementById("state").value;
+
   database.ref("scam/").push().set({
     name: Name,
     email: Email,
+    Country: Country
   });
 }
 
 //Preventing checkbox to uncheck
-$(".checkbox").click(function (e) {
+$("input[type=checkbox]").click(function (e) {
   var checkbox = $(this);
   if (checkbox.is(":checked")) {
     //check it
@@ -130,3 +122,6 @@ function fillProgressBar() {
   countChecked();
   $(":checkbox").click(countChecked);
 }
+
+
+
